@@ -9,6 +9,8 @@ for ii = 1:4
     xlabel ('Electrodes'); ylabel ('Electrodes');
     title (figure_title);
     imagesc(result_fc)
+    set(gca, 'YDir','reverse')
+    axis tight
     %grid on
     colorbar;
     colormap(jet);
