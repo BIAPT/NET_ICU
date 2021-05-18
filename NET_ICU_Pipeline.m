@@ -6,7 +6,7 @@
 
 %% Define Parameters
 % wPLI and dPLI parameters
-frequencies = ["alpha", "theta"]; % This can be ["alpha" "theta" "delta"]
+frequencies = ["alpha"]; % This can be ["alpha" "theta" "delta"]
 window_size = 10; % This is in seconds and will be how we chunk the whole dataset
 number_surrogate = 20; % Number of surrogate wPLI to create / # of permutations
 p_value = 0.05; % the p value to make our test on
@@ -33,40 +33,68 @@ for f = 1:numel(files)
     info = split(files(f).name,'_');
     ID = info{1}(5:end);
     task = info{2}(6:end);
-    hemispheres = ["Left", "Right", "Whole"];
+    hemispheres = ["Left", "Right"];
 
     disp("load complete: " + ID + '_' + task)
-    
-    for i = 1:length(hemispheres)
-        hemisphere = hemispheres(i);
+
+    %% wPLI analysis for alpha and theta frequencies
+    for frequency = 1:length(frequencies) 
+        if frequencies(frequency) == "alpha"
+            frequency_band = [8 13]; % This is in Hz
+        elseif frequencies(frequency) == "theta"
+            frequency_band = [4 8]; % This is in Hz
+        elseif frequencies(frequency) == "delta"
+            frequency_band = [1 4]; % This is in Hz 
+        end
+        
+        %% Calculate Results for whole brain: 
+        hemisphere = "Whole";
         outdir = fullfile(resultsfolder , ID, hemisphere);
         mkdir(fullfile(outdir,'wPLI'));
         mkdir(fullfile(outdir,'dPLI'));
-    
-        %% wPLI analysis for alpha and theta frequencies
-        for f = 1:length(frequencies) 
-            if frequencies(f) == "alpha"
-                frequency_band = [8 13]; % This is in Hz
-            elseif frequencies(f) == "theta"
-                frequency_band = [4 8]; % This is in Hz
-            elseif frequencies(f) == "delta"
-                frequency_band = [1 4]; % This is in Hz 
-            end
-            
-            %% Calculate the wpli
-            disp(strcat("Participant: ", ID , "_wPLI"));
-            result_wpli = na_wpli(recording, frequency_band, window_size, step_size, number_surrogate, p_value);
-            plot_wPLI(result_wpli.data.avg_wpli, ID, frequencies(f), task, hemisphere, fullfile(outdir,'wPLI'))
+        
+        % Calculate the wpli
+        disp(strcat("Participant: ", ID , "_wPLI"));
+        result_wpli = na_wpli(recording, frequency_band, window_size, step_size, number_surrogate, p_value);
+        labels = struct2cell(struct('labels', {result_wpli.metadata.channels_location.labels}));
+        plot_wPLI(result_wpli.data.avg_wpli, ID, frequencies(frequency), task, hemisphere, fullfile(outdir,'wPLI'),labels)
 
-            %% Calculate the dpli
-            disp(strcat("Participant: ", ID , "_dPLI"));
-            result_dpli = na_dpli(recording, frequency_band, window_size, step_size, number_surrogate, p_value);
-            plot_dPLI(result_dpli.data.avg_dpli, ID, frequencies(f), task, hemisphere, fullfile(outdir,'dPLI'))
+        % Calculate the dpli
+        disp(strcat("Participant: ", ID , "_dPLI"));
+        result_dpli = na_dpli(recording, frequency_band, window_size, step_size, number_surrogate, p_value);
+        labels = struct2cell(struct('labels', {result_dpli.metadata.channels_location.labels}));
+        plot_dPLI(result_dpli.data.avg_dpli, ID, frequencies(frequency), task, hemisphere, fullfile(outdir,'dPLI'),labels)
+
+        % Calculate the Hub-DRI
+        disp(strcat("Participant: ", ID , "_HUB"));
+        % TODO
+        
+        for i = 1:length(hemispheres)
+            hemisphere = hemispheres(i);
+            location = result_wpli.metadata.channels_location;
+            location = {location.labels};
             
-            %% Calculate the Hub-DRI
-            disp(strcat("Participant: ", ID , "_HUB"));
-            % TODO
+            % get subset of channels 
+            Subset_hem = readtable('utils/EGI128_' + hemisphere + 'Hemisphere+Midline.txt');
+            Subset_hem = struct2cell(reshape(table2struct(Subset_hem),1,[]));
+
+            % find overlap between recording and subset
+            common_labels = intersect(location,Subset_hem, 'stable');
+            common_labels = reshape(common_labels,1,[]);
+            
+            % filter the data
+            wpli_hem = filter_matrix(result_wpli.data.avg_wpli,location, common_labels);
+            dpli_hem = filter_matrix(result_dpli.data.avg_dpli,location, common_labels);
+            
+            % define new outdir
+            outdir = fullfile(resultsfolder , ID, hemisphere);
+            mkdir(fullfile(outdir,'wPLI'));
+            mkdir(fullfile(outdir,'dPLI'));
+            
+            plot_wPLI(wpli_hem, ID, frequencies(frequency), task, hemisphere, fullfile(outdir,'wPLI'),common_labels)
+            plot_dPLI(wpli_hem, ID, frequencies(frequency), task, hemisphere, fullfile(outdir,'dPLI'),common_labels)
 
         end
     end
 end    
+
