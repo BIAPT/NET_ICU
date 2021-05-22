@@ -1,4 +1,4 @@
-function [ro_pli, ro_electrodes, ro_regions] = filter_and_reorder_channels(data,channels,pattern)
+function [ro_pli, ro_channels, ro_regions] = filter_and_reorder_channels(data,channels,pattern)
     % 
     % By Charlotte Maschke 21.05.2021
     %
@@ -19,28 +19,29 @@ function [ro_pli, ro_electrodes, ro_regions] = filter_and_reorder_channels(data,
     pattern = readtable(pattern);
     channels_order = pattern.label;
     regions_order = pattern.region;
-            
+    
+    channels_origin = {channels.labels};
+    
     % Init the return data structure
     ro_indices = [];
-    ro_electrodes = {};
     ro_regions = {};
 
+    % a is just an index to append the struct
     for i = 1:length(channels_order)
         c = channels_order{i};
-        [~,~,index] = intersect(c, channels);
+        [~,~,index] = intersect(c, channels_origin);
 
         % if the electrode is in the pattern file (all but non-brain)
         if  ~isempty(index)
             % as a sanity-check on compare both: 
-            if char(channels(index)) ~= char(channels_order(i))
+            if char(channels_origin(index)) ~= char(channels_order(i))
                 disp("ERROR: Electrodes not matching!")
             end
             ro_indices = [ro_indices, index];
-            ro_electrodes = [ro_electrodes, channels(index)];
             ro_regions = [ro_regions, regions_order(i)];
         end
     end
     
     ro_pli = data(ro_indices,ro_indices);
-    
+    ro_channels = channels(ro_indices);
 end
