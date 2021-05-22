@@ -6,15 +6,15 @@
 
 %% Define Parameters
 % wPLI and dPLI parameters
-frequencies = ["alpha"]; % This can be ["alpha" "theta" "delta"]
-window_size = 20; % This is in seconds and will be how we chunk the whole dataset
-number_surrogate = 10; % Number of surrogate wPLI to create / # of permutations
+frequencies = ["alpha" "theta"]; % This can be ["alpha" "theta" "delta"]
+window_size = 10; % This is in seconds and will be how we chunk the whole dataset
+number_surrogate = 20; % Number of surrogate wPLI to create / # of permutations
 p_value = 0.05; % the p value to make our test on
 step_size = window_size;
 
 % HUB parameters
 threshold = 'MSG'; %Minimally Spanning graph
-threshold_range = 0.70:-0.01:0.01; % used ONLY if MSG More connected to less connected
+threshold_range = 0.90:-0.01:0.01; % used ONLY if MSG More connected to less connected
 
 %% Load clean EEG data set
 % select the folder with the 
