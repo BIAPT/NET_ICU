@@ -6,6 +6,7 @@ function [] = plot_hub(hub_norm_weights, ID, frequency, task, hemisphere, outdir
     figure_title = strcat('HUB-',ID,'-',frequency,'-',task,'-',hemisphere);
     
     fig = topoplot(hub_norm_weights,labels,'maplimits','absmax');
+    caxis([0 10]);
     colorbar()
     title (figure_title);
     

@@ -13,7 +13,7 @@ p_value = 0.05; % the p value to make our test on
 step_size = window_size;
 
 % HUB parameters
-threshold = 'MSG'; %Minimally Spanning graph
+threshold = 'MSG'; % Minimally Spanning graph
 threshold_range = 0.90:-0.01:0.01; % used ONLY if MSG More connected to less connected
 
 %% Load clean EEG data set
