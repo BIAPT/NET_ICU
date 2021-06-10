@@ -38,7 +38,6 @@ for ii = 1:4
     yticklabels(labels); 
     yticks(1:length(labels));
 
-
     % save the file with the appropriate name
     saveas(figure(ii), fullfile(outdir, figure_title), 'jpg')
     %pause(2);

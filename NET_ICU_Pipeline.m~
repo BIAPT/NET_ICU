@@ -40,16 +40,13 @@ for f = 1:numel(files)
     disp("load complete: " + ID + '_' + task)
     
     %% Topographic map of alpha and theta power
-    if frequency == "alpha-theta"
     frequency_band = [4 13]; % This is in Hz
-    end
     
     outdir = fullfile(resultsfolder , ID);
-    mkdir(fullfile(outdir,'fc_data'));
-    participant_out_path_topographicmap = strcat(fullfile(outdir,'fc_data'),filesep,'topographicmap_',frequency,'_',ID,'_',task,'.mat');            
-              
-    % calculate the topographic map of frequency power
-    result_td = na_topographic_distribution(recording, window_size, step_size, bandpass); % need to edit bandpass
+        mkdir(fullfile(outdir,'fc_data'));
+        participant_out_path_wpli = strcat(fullfile(outdir,'fc_data'),filesep,'wpli_',frequency,'_',ID,'_',task,'.mat');            
+        participant_out_path_dpli = strcat(fullfile(outdir,'fc_data'),filesep,'dpli_',frequency,'_',ID,'_',task,'.mat');            
+
 
     %% wPLI analysis for alpha and theta frequencies
     for fr = 1:length(frequencies) 
