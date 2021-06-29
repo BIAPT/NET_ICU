@@ -13,6 +13,7 @@ function topographic_map = topographic_map_function(EEG,spectopo_prp, ID, task, 
     % Load variables for 'Topographic Map'
     freqidx = spectopo_prp.freqidx; 
     frequencies = spectopo_prp.frequencies;
+    caxis_range = [-5 5; -10 10]; % color bar limits
     
     % Compute Topographic Maps
     [eegspecdB,freqs,compeegspecdB,resvar,specstd] = spectopo(EEG.data,length(EEG.data),EEG.srate,'chanlocs', EEG.chanlocs,'freqfac',2,'plot','off');
@@ -23,12 +24,10 @@ function topographic_map = topographic_map_function(EEG,spectopo_prp, ID, task, 
     
     % Plot Topographic Maps
     mkdir(fullfile(outdir,'Topographic Maps'));
-    caxis_range = [-5 5; -10 10]; % color bar limits
     
     for i = 1:length(caxis_range) 
-        disp(['Calculating Topographic Map #' num2str(i)])
-        figure_name = strcat('Topographic_Maps-',ID,'-',task,'-',"Whole",'-',i);
-    
+    disp(['Calculating Topographic Map #' num2str(i)])
+    figure_name = strcat('Topographic_Maps-',ID,'-',task,'-',"Whole",'-',i);
         for ii = 1:lfidx
                 topographic_map = figure;
                 sgtitle('Topographic Maps of Alpha and Theta Power');
@@ -46,8 +45,7 @@ function topographic_map = topographic_map_function(EEG,spectopo_prp, ID, task, 
                 saveas(topographic_map,fullfile ('Topographic Maps', figure_name), 'jpg');
                 save(topographic_map,fullfile ('Topographic Maps', figure_name));
                 close(topographic_map)      
-        end 
-        
+        end   
         % Save topodata in mat.file
         save(topodata,fullfile('Topographic Maps', 'topodata'));
     end

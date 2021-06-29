@@ -1,5 +1,4 @@
-% Spectrogram
-% Compute, plot, and save
+% Computate, plot, and save Spectrogram
 % By: Miriam Han June 23rd, 2021
 
 function spectrogram = spectrogram_function(EEG,spectopo_prp, ID, task, outdir)
@@ -22,12 +21,10 @@ function spectrogram = spectrogram_function(EEG,spectopo_prp, ID, task, outdir)
     set(0,'DefaultFigureVisible','off');% disable output to screen
 
     % Plot Spectogram
-    mkdir(fullfile(outdir,'SPECTROGRAM')); % create a folder to save the figures and mat. files
     caxis_range = [-25 25; -30 30]; % color bar limits
-    disp(strcat("Participant: ",ID, "_SPECTROGRAM"));
+    mkdir(fullfile(outdir,'SPECTROGRAM')); % create a folder to save the figures and mat. files
     
     for i = 1: length(caxis_range)
-        disp(['Calculating Spectrogram #' num2str(i)])
         figure_title = strcat('Spectrogram-',ID,'-',task,'-',"Whole",'-',i);
         spectrogram = figure(i);
         plot_matrix(y, t, f);
@@ -38,13 +35,14 @@ function spectrogram = spectrogram_function(EEG,spectopo_prp, ID, task, outdir)
         xlabel('Time','fontsize',12);
         colormap(jet);
         movegui(spectrogram,'west');
-        set(spectrogram,'CreateFcn','set(gcf,''Visible'',''on'')');
-        caxis(caxis_range(i));
+        set(spectrogram,'CreateFcn','set(gcf,''Visible'',''on'')'); 
         
         % Save Spectogram
+        disp(strcat("Participant: ",ID, "_SPECTROGRAM"));
         saveas(spectrogram,fullfile ('SPECTROGRAM', figure_title), 'jpg');
         close(spectrogram)
         
+
     end
     
     
