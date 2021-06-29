@@ -44,9 +44,8 @@ for f = 1:numel(files)
     spectogram = spectogram_function(recording, spectopo_prp, ID, task, outdir_spectogram);
     
     %% Topographic Maps of Alpha and Theta Power
-    outdir = fullfile(resultsfolder, ID, "Whole");
-    topographic_map = 
-
+    outdir_topographicmap = fullfile(resultsfolder, ID, "Whole");
+    topographic_map = topographic_map_function(recording, spectopo_prp, ID, task, outdir_topographicmap);
 
     %% wPLI analysis for alpha and theta frequencies
     for fr = 1:length(frequencies) 
