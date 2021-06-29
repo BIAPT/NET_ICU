@@ -39,15 +39,16 @@ for f = 1:numel(files)
 
     disp("load complete: " + ID + '_' + task)
     
-    %% Topographic map of alpha and theta power
-    if frequency == "alpha-theta"
-    frequency_band = [4 13]; % This is in Hz
-    end
+    %% Spectrogram 
+    outdir_spectrogram = fullfile(resultsfolder, ID, "Whole");
+    spectogram = spectogram_function(recording, spectopo_prp, ID, task, outdir_spectogram)
     
-    outdir = fullfile(resultsfolder , ID);
-    mkdir(fullfile(outdir,'fc_data'));
-    participant_out_path_topographicmap = strcat(fullfile(outdir,'fc_data'),filesep,'topographicmap_',frequency,'_',ID,'_',task,'.mat');            
-              
+    %% Topographic map of alpha and theta power
+    outdir = fullfile(resultsfolder, ID, "Whole");
+    mkdir(fullfile(outdir,'topographic map_data'));
+    participant_out_path_topographicmap = strcat(fullfile(outdir,'spectopo_data'),filesep,'topographicmap_',frequency,'_',ID,'_',task,'.mat');            
+    participant_out_path_spectrogram = strcat(fullfile(outdir,'spectopo_data'),filesep,'spectrogram_',frequency,'_',ID,'_',task,'.mat');            
+             
     % calculate the topographic map of frequency power
     result_td = na_topographic_distribution(recording, window_size, step_size, bandpass); % need to edit bandpass
 

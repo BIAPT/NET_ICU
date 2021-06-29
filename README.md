@@ -7,12 +7,9 @@ Current features are already available
 - **Functional connectivity (dPLI) ** : Time-averaged functional connectivity for the different experimental phases
 - **Hub ** : Time-averaged functional connectivity for the different experimental phases
 
-Features left to implement
 
-- Spectrogram
-- Topographic map 
-- Separation into left-right hemisphere
-
+- ** Spectrogram : Average frequency of all electrodes
+- ** Topographic map : Topographic map of frequency power from 4 to 13 Hz
 
 
 ## Repository Structure
