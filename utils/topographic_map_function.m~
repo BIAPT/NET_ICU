@@ -33,18 +33,20 @@ function topographic_map = topographic_map_function(EEG,spectopo_prp, ID, task, 
         
         for lfidx=1:length(freqidx)
                 topodata(:,lfidx) = eegspecdB(:,freqidx(1,lfidx)) - mean(eegspecdB(:,freqidx(1,lfidx)));
+              
                 nexttile(lfidx)
                 topoplot(topodata(1:size(eegspecdB,1),lfidx),EEG.channels_location,'maplimits','absmax', 'electrodes', 'off');
-               
-                if lfidx == 5 || lfidx ==10
-                    colorbar;
-                end
+               % elseif lfidx>5
+                   %nexttile(lfidx+1)
+                  % topoplot(topodata(1:size(eegspecdB,1),lfidx),EEG.channels_location,'maplimits','absmax', 'electrodes', 'off');
+                %end
                 
                 % labels
                 title_text = num2str(frequencies(lfidx));
                 title([title_text, 'Hz'], 'Fontsize',14);
                 caxis(caxis_range(color_bar_ranges,:));
                 set(0,'DefaultFigureVisible','on');  
+                % axis square;
         end
        
         % position the color bar as a global colorbar
