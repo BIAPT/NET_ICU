@@ -3,9 +3,10 @@ function [] = plot_dPLI(result_fc, ID, frequency, task, hemisphere, outdir,label
 % Figures will be saved with different thresholds
 
 for ii = 1:4
-    figure_title = strcat('dPLI-',ID,'-',frequency,'-',task,'-',hemisphere,'-',num2str(ii));
+    figure_title = strcat('dPLI-',ID,'-',frequency,'-',task,'-',hemisphere);
+    figure_title_save = strcat('dPLI-',ID,'-',frequency,'-',task,'-',hemisphere,'-',num2str(ii));
     figure(ii);clf;hold on;
-    set(gca, 'FontSize', 12);
+    set(gca, 'FontSize', 20);
     xlabel ('Electrodes'); ylabel ('Electrodes');
     title (figure_title);
     imagesc(result_fc)
@@ -27,7 +28,7 @@ for ii = 1:4
     end
 
     a = get(gca,'XTickLabel');
-    set(gca,'XTickLabel',a,'fontsize',5)
+    set(gca,'XTickLabel',a,'fontsize',9)
     
     % setting the x ticks to be vertical with the right label names
     xtickangle(90)
@@ -39,7 +40,7 @@ for ii = 1:4
     yticks(1:length(labels));
 
     % save the file with the appropriate name
-    saveas(figure(ii), fullfile(outdir, figure_title), 'jpg')
+    saveas(figure(ii), fullfile(outdir, figure_title_save), 'jpg')
     %pause(2);
     close(figure(ii))
     % path of the figure added in front of the title
