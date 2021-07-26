@@ -46,8 +46,8 @@ for f = 1:numel(files)
     spectrogram = spectrogram_function(recording, spectopo_prp, ID, task, outdir_spectrogram);
     
     %% Topographic Maps of Alpha and Theta Power
-    %spectopo_prp = spectopo_prp_struct;
-    %disp('spectopo_prp load complete')
+    % spectopo_prp = spectopo_prp_struct;
+    % disp('spectopo_prp load complete')
     outdir_topographicmap = fullfile(resultsfolder, ID, task,"Whole",'Topographic Maps');
     topographic_map = topographic_map_function(recording, spectopo_prp, ID, task, outdir_topographicmap);
 

@@ -48,6 +48,7 @@ function topographic_map = topographic_map_function(EEG,spectopo_prp, ID, task, 
                 %title.FontSize=14;
                 caxis(caxis_range(color_bar_ranges,:));
                 set(0,'DefaultFigureVisible','on');  
+                % axis square;
         end
        
         % position the color bar as a global colorbar
