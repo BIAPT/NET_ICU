@@ -1,0 +1,26 @@
+function [] = plot_hub(hub_norm_weights, ID, frequency, task, hemisphere, outdir,labels)
+    % this function is to create and save the figure of the HUB
+    % INPUT: 
+    
+    %% plot the HUB
+    
+    caxis_range = [0 5; 0 10; 0 15]; % colorbar limits
+    
+    for color_bar_ranges = 1:length(caxis_range)
+        
+        
+    end
+    
+    
+    fig = topoplot(hub_norm_weights,labels,'maplimits','absmax');
+    caxis([0 10]);
+    colorbar()
+    title (figure_title);
+    
+    % save the file with the appropriate name
+    saveas(fig, fullfile(outdir, figure_title), 'jpg')
+    %pause(2);
+    close()
+    % path of the figure added in front of the title
+
+end

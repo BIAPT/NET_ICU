@@ -3,17 +3,23 @@ function [] = plot_hub(hub_norm_weights, ID, frequency, task, hemisphere, outdir
     % INPUT: 
     
     %% plot the HUB
-    figure_title = strcat('HUB-',ID,'-',frequency,'-',task,'-',hemisphere);
     
-    fig = topoplot(hub_norm_weights,labels,'maplimits','absmax');
-    caxis([0 10]);
-    colorbar()
-    title (figure_title);
+    caxis_range = [0 5; 0 10; 0 15]; % colorbar limits
     
-    % save the file with the appropriate name
-    saveas(fig, fullfile(outdir, figure_title), 'jpg')
-    %pause(2);
-    close()
-    % path of the figure added in front of the title
-
-end
+    for color_bar_ranges = 1:length(caxis_range)
+        figure_title_save = strcat('HUB-',ID,'-',frequency,'-',task,'-',hemisphere,num2str(color_bar_ranges));
+        figure_title = strcat('HUB-',ID,'-',frequency,'-',task,'-',hemisphere);
+        
+        % plot the hub
+        fig = topoplot(hub_norm_weights,labels,'maplimits','absmax');
+        
+        % labels 
+        colorbar()
+        title (figure_title);
+        caxis(caxis_range(color_bar_ranges,:));
+        set(0,'DefaultFigureVisible','on'); 
+        
+        % save the figures
+        saveas(fig, fullfile(outdir, figure_title_save), 'jpg')
+        close()
+    end
