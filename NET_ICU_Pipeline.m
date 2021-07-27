@@ -43,12 +43,10 @@ for f = 1:numel(files)
     spectopo_prp = spectopo_prp_struct;
     disp('spectopo_prp load complete')
     outdir_spectrogram = fullfile(resultsfolder, ID,"Whole",'Spectrogram');
-    % outdir_spectrogram = fullfile(resultsfolder, ID, task,"Whole",'Spectrogram');
     spectrogram = spectrogram_function(recording, spectopo_prp, ID, task, outdir_spectrogram);
     
     %% Topographic Maps of Alpha and Theta Power
     outdir_topographicmap = fullfile(resultsfolder, ID, "Whole",'Topographic Maps');
-    %outdir_topographicmap = fullfile(resultsfolder, ID, task,"Whole",'Topographic Maps');
     topographic_map = topographic_map_function(recording, spectopo_prp, ID, task, outdir_topographicmap);
 
     %% wPLI analysis for alpha and theta frequencies
