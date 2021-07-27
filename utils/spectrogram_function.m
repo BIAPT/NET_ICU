@@ -42,7 +42,6 @@ function spectrogram_fig = spectrogram_function(EEG,spectopo_prp, ID, task, outd
             xlabel('Time','fontsize',14);
             colormap(jet);
             caxis(caxis_range(color_bar_ranges,:));
-            %movegui(spect_plot,'west');
             set(0,'DefaultFigureVisible','on'); % able output to screen
             axis square;
             

@@ -1,6 +1,11 @@
 # NET_ICU Pipeline
 This repository is for the EEG-based graph theory analysis of the NET_ICU study. The code found here is a work-in progress and not a final implementation. 
 
+Requirement to use the pipeline:
+
+- MATLAB version: R2020a or more recent version is required
+- Neuroalgo MATLAB functions
+
 Current features are already available
 
 - **Functional connectivity (wPLI) ** : Time-averaged functional connectivity for the different experimental phases

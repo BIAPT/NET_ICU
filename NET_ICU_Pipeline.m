@@ -45,13 +45,11 @@ for f = 1:numel(files)
     %% Spectrogram 
     spectopo_prp = spectopo_prp_struct;
     disp('spectopo_prp load complete')
-    outdir_spectrogram = fullfile(resultsfolder, ID, task,"Whole",'Spectrogram');
+    outdir_spectrogram = fullfile(resultsfolder, ID,"Whole",'Spectrogram');
     spectrogram = spectrogram_function(recording, spectopo_prp, ID, task, outdir_spectrogram);
     
     %% Topographic Maps of Alpha and Theta Power
-    % spectopo_prp = spectopo_prp_struct;
-    % disp('spectopo_prp load complete')
-    outdir_topographicmap = fullfile(resultsfolder, ID, task,"Whole",'Topographic Maps');
+    outdir_topographicmap = fullfile(resultsfolder, ID, "Whole",'Topographic Maps');
     topographic_map = topographic_map_function(recording, spectopo_prp, ID, task, outdir_topographicmap);
 
     %% wPLI analysis for alpha and theta frequencies
@@ -146,7 +144,7 @@ for f = 1:numel(files)
             end
             % here we are using only the degree and not the betweeness centrality
             [~, hub_weights] = binary_hub_location(b_wpli, ro_w_channels,  1.0, 0.0);
-            hub_norm_weights = (hub_weights - mean(hub_weights))  / std(hub_weights);
+            hub_norm_weights = (hub_weights - mean(hub_weights)) / std(hub_weights);
             
             mkdir(fullfile(outdir,'HUB'));
             plot_hub(hub_norm_weights, ID, frequency, task, hemisphere, fullfile(outdir,'HUB'), ro_w_channels)
