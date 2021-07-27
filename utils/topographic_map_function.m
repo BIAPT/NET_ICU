@@ -26,7 +26,8 @@ function topographic_map = topographic_map_function(EEG,spectopo_prp, ID, task, 
         mkdir(fullfile(outdir));
         disp(['Calculating Topographic Map #' num2str(color_bar_ranges)])
         topographic_map = figure(color_bar_ranges);
-        figure_name = strcat('Topographic Maps','-',ID,'-',task,'-','Whole','-',num2str(color_bar_ranges));
+        figure_name_save = strcat('Topographic Maps','-',ID,'-',task,'-','Whole','-',num2str(color_bar_ranges));
+        figure_name = strcat('Topographic Maps','-',ID,'-',task);
         %t= tiledlayout(2,6, 'TileSpacing','compact','Padding','compact');
         t= tiledlayout(2,5, 'TileSpacing','compact','Padding','compact');
         title(t,figure_name);
@@ -48,19 +49,16 @@ function topographic_map = topographic_map_function(EEG,spectopo_prp, ID, task, 
         end
        
         % position the color bar as a global colorbar
-        %cb = colorbar("eastoutside");
-        %cb.Layout.Tile = 'eastoutside';
         
         % Save Topographic Maps figures and mat.files
         disp(['Saving the figure of Topographic Map #' num2str(color_bar_ranges)])
-        saveas(figure(color_bar_ranges), fullfile(outdir,figure_name),'jpg');
+        saveas(figure(color_bar_ranges), fullfile(outdir,figure_name_save),'jpg');
         pause(1);
         disp('Topographic Map figure successfully saved')
         pause(2);
         close(topographic_map)   
         
         % Save topodata in mat.file
-        %save(topodata,fullfile('topodata'));
     end
 
     
