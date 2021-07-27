@@ -15,8 +15,7 @@ step_size = window_size;
 % HUB parameters
 % threshold can be either an float between 0 and 1 for an absolute threshold or "MSG" standing for minimally
 % spanning graph. If "MSG" is used, you need to define the range of thrsholds
-threshold = "MSG"; % Minimally Spanning graph
-%threshold = 0.1 ; % Minimally Spanning graph
+threshold = "MSG"; % Minimally Spanning graph OR a value between 0 to 1
 threshold_range = 0.90:-0.01:0.01; % used ONLY if MSG More connected to less connected
 
 %% Load clean EEG data set
@@ -134,16 +133,17 @@ for f = 1:numel(files)
             disp(strcat("Participant: ", ID , "_HUB"));
 
             if isfloat(threshold)
-                [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, threshold));
+                finalthreshold = threshold;
+                [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
             elseif threshold == "MSG"
-                [threshold] = find_smallest_connected_threshold(ro_wpli, threshold_range);
-                [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, threshold));
+                [finalthreshold] = find_smallest_connected_threshold(ro_wpli, threshold_range);
+                [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
             else
-                disp("HUB can not be calculated! Threshold input incorrect. Please enter eigther an integer or a string MSG ")
-                break
+                disp("HUB can not be calculated! Threshold input incorrect. Please enter either a float or a string MSG ")
             end
             % here we are using only the degree and not the betweeness centrality
             [~, hub_weights] = binary_hub_location(b_wpli, ro_w_channels,  1.0, 0.0);
+            % normalize hub to z-score
             hub_norm_weights = (hub_weights - mean(hub_weights)) / std(hub_weights);
             
             mkdir(fullfile(outdir,'HUB'));
