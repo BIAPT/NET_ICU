@@ -76,7 +76,7 @@ for f = 1:numel(files)
 
         % Calculate the dpli
         disp(strcat("Participant: ", ID , "_dPLI"));
-        result_dpli = na_dpli(recording, frequency_band, window_size, step_size, number_surrogate, p_value);
+        result_dpli = na_dpli_corrected(recording, frequency_band, window_size, step_size, number_surrogate, p_value);
         
         %% Save wPLI and dPLI for later Matlab and Python use
         % save dPLI and wPLI for later in Matlab
