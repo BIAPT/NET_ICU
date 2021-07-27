@@ -134,7 +134,7 @@ for f = 1:numel(files)
             
             % here we are using only the degree and not the betweeness centrality
             [~, hub_weights] = binary_hub_location(b_wpli, ro_w_channels,  1.0, 0.0);
-            hub_norm_weights = (hub_weights - mean(hub_weights))  / std(hub_weights);
+            hub_norm_weights = (hub_weights - mean(hub_weights)) / std(hub_weights);
             
             mkdir(fullfile(outdir,'HUB'));
             plot_hub(hub_norm_weights, ID, frequency, task, hemisphere, fullfile(outdir,'HUB'), ro_w_channels)
