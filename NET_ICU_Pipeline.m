@@ -48,10 +48,8 @@ for f = 1:numel(files)
     spectrogram = spectrogram_function(recording, spectopo_prp, ID, task, outdir_spectrogram);
 
     %% Peak frequqncy 
-    spectopo_prp = spectopo_prp_struct;
-    disp('spectopo_prp load complete')
     outdir_peak = fullfile(resultsfolder, ID,"Whole",'Peak');
-    peak = peak_frequency_function(recording, spectopo_prp, ID, task, outdir_spectrogram);    
+    peak = peak_frequency_function(recording, ID, task, outdir_spectrogram);    
     
     %% Topographic Maps of Alpha and Theta Power
     outdir_topographicmap = fullfile(resultsfolder, ID, "Whole",'Topographic Maps');
@@ -135,6 +133,7 @@ for f = 1:numel(files)
             plot_wPLI(ro_wpli, ID, frequency, task, hemisphere, fullfile(outdir,'wPLI'),ro_w_regions)
             plot_dPLI(ro_dpli, ID, frequency, task, hemisphere, fullfile(outdir,'dPLI'),ro_d_regions)
 
+            
             %% calculate and save HUB
             disp(strcat("Participant: ", ID , "_HUB"));
 

@@ -2,7 +2,7 @@
 % Compute, plot, and save Spectrogram
 % By: Miriam Han June 23rd, 2021
 
-function peak_fig = peak_frequency_function(EEG,spectopo_prp, ID, task, outdir)
+function peak_fig = peak_frequency_function(EEG, ID, task, outdir)
     % Input
         % EEG: EEG recording 
         % spectopo_prp: spectopo_prp struct
@@ -11,39 +11,28 @@ function peak_fig = peak_frequency_function(EEG,spectopo_prp, ID, task, outdir)
         % outdir: outdirectory for saving the spectogram 
         
     % Compute Spectogram
-    data = EEG.data; 
-    params.tapers = [spectopo_prp.timeBandwidth spectopo_prp.numberTaper];
+    data = EEG.data'; 
     params.Fs = EEG.sampling_rate;
-    params.fpass = spectopo_prp.fp;
     %params.trialave = 1;
     
-    % Compute Spectrogram
-    % [eegspecdB,freqs,compeegspecdB,resvar,specstd] = spectopof(data, length(data),params.Fs);
+    [pxx,f] = pwelch(data,500,30,500,params.Fs);
+    %average over channels
+    pxx = mean(pxx,2);
     
-    % non-overlapping window of 10s
-    [S, t, f] = mtspecgramcWaitBar(data', [spectopo_prp.windowLength spectopo_prp.stepSize], params);
-    y = medfilt1(S, spectopo_prp.tso, 2);  % Perform temporal smoothing with a median filter of order tso7
-    
-    % Averaged over all the electrodes and time
-    averaged_y_time = squeeze(mean(y,1));
-    averaged_y_space = squeeze(mean(averaged_y_time,2));
-
-    % Plot Spectogram
+    % Plot peak
     mkdir(fullfile(outdir)); % create the outdirectory to save the figures
-    
     peak_fig = figure();
-    plot(f,log(averaged_y_time));
-    
+    plot(f,10*log(pxx))
     % label
     title(strcat('Peak-',ID,'-',task),'fontsize',15);
-    ylabel('Power','fontsize',14);
-    xlabel('Frequency','fontsize',14);
+    xlabel('Frequency (Hz)','fontsize',14)
+    ylabel('PSD (dB/Hz)','fontsize',14)
+    xlim([0,60])
     set(0,'DefaultFigureVisible','on'); % able output to screen
-    axis square;
 
-    % Save Spectogram
+    % Save Peak
     figure_name = strcat('Peak-',ID,'-',task,'-',"Whole");
-    saveas(figure(color_bar_ranges),fullfile (outdir, figure_name), 'jpg');
+    saveas(peak_fig, fullfile(outdir, figure_name), 'jpg');
     %save(figure(color_bar_ranges),fullfile (outdir, figure_name),'mat');
     pause(1);
     disp('Peak figure successfully saved')
