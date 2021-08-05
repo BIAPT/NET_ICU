@@ -1,4 +1,4 @@
-function [] = plot_hub(hub_norm_weights, ID, frequency, task, hemisphere, outdir,labels)
+function [] = plot_hub(hub_weights, ID, frequency, task, hemisphere, outdir,labels)
     % this function is to create and save the figure of the HUB
     % INPUT: 
     
@@ -11,7 +11,7 @@ function [] = plot_hub(hub_norm_weights, ID, frequency, task, hemisphere, outdir
         figure_title = strcat('HUB-',ID,'-',frequency,'-',task,'-',hemisphere);
         
         % plot the hub
-        fig = topoplot(hub_norm_weights,labels,'maplimits','absmax');
+        fig = topoplot(hub_weights,labels,'maplimits','absmax');
         
         % labels 
         title (figure_title);
