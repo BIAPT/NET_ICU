@@ -7,6 +7,7 @@
 %% Define Parameters
 % wPLI and dPLI parameters
 frequencies = ["alpha" "theta"]; % This can be ["alpha" "theta" "delta"]
+%frequencies = ["alpha"]; % This can be ["alpha" "theta" "delta"]
 window_size = 10; % This is in seconds and will be how we chunk the whole dataset
 number_surrogate = 20; % Number of surrogate wPLI to create / # of permutations
 p_value = 0.05; % the p value to make our test on
@@ -133,27 +134,27 @@ for f = 1:numel(files)
             plot_wPLI(ro_wpli, ID, frequency, task, hemisphere, fullfile(outdir,'wPLI'),ro_w_regions)
             plot_dPLI(ro_dpli, ID, frequency, task, hemisphere, fullfile(outdir,'dPLI'),ro_d_regions)
 
-            
-            %% calculate and save HUB
-            disp(strcat("Participant: ", ID , "_HUB"));
+            if hemisphere == "Whole"
+                %% calculate and save HUB
+                disp(strcat("Participant: ", ID , "_HUB"));
 
-            if isfloat(threshold)
-                finalthreshold = threshold;
-                [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
-            elseif threshold == "MSG"
-                [finalthreshold] = find_smallest_connected_threshold(ro_wpli, threshold_range);
-                [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
-            else
-                disp("HUB can not be calculated! Threshold input incorrect. Please enter either a float or a string MSG ")
+                if isfloat(threshold)
+                    finalthreshold = threshold;
+                    [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
+                elseif threshold == "MSG"
+                    [finalthreshold] = find_smallest_connected_threshold(ro_wpli, threshold_range);
+                    [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
+                else
+                    disp("HUB can not be calculated! Threshold input incorrect. Please enter either a float or a string MSG ")
+                end
+                % here we are using only the degree and not the betweeness centrality
+                [~, hub_weights] = unnorm_binary_hub_location(b_wpli, ro_w_channels,  1.0, 0.0);
+                % do not normalize hub to z-score
+                % hub_norm_weights = (hub_weights - mean(hub_weights)) / std(hub_weights);
+
+                mkdir(fullfile(outdir,'HUB'));
+                plot_hub(hub_weights, ID, frequency, task, hemisphere, fullfile(outdir,'HUB'), ro_w_channels)
             end
-            % here we are using only the degree and not the betweeness centrality
-            [~, hub_weights] = unnorm_binary_hub_location(b_wpli, ro_w_channels,  1.0, 0.0);
-            % do not normalize hub to z-score
-            % hub_norm_weights = (hub_weights - mean(hub_weights)) / std(hub_weights);
-            
-            mkdir(fullfile(outdir,'HUB'));
-            plot_hub(hub_weights, ID, frequency, task, hemisphere, fullfile(outdir,'HUB'), ro_w_channels)
-
         end
     end
 end  

@@ -11,13 +11,10 @@ function [] = plot_hub(hub_weights, ID, frequency, task, hemisphere, outdir,labe
         figure_title = strcat('HUB-',ID,'-',frequency,'-',task,'-',hemisphere);
         
         % plot the hub
-        fig = topoplot(hub_weights,labels,'maplimits','absmax');
-        
+        fig = topoplot(hub_weights,labels,'maplimits',caxis_range(color_bar_ranges,:),'electrodes', 'on','gridscale',100);
         % labels 
         title (figure_title);
-        caxis(caxis_range(color_bar_ranges,:));
         colorbar;
-        set(0,'DefaultFigureVisible','on'); 
         
         % save the figures
         saveas(fig, fullfile(outdir, figure_title_save), 'jpg')
