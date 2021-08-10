@@ -3,8 +3,10 @@ This repository is for the EEG-based graph theory analysis of the NET_ICU study.
 
 Requirement to use the pipeline:
 
-- MATLAB version: R2020a or more recent version is required
+- MATLAB version: R2020a or more recent version
 - Neuroalgo MATLAB functions
+- Signal Processing Toolbox
+- Symbolic Math Toolbox
 
 Current features are already available
 
