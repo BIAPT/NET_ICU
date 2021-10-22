@@ -7,6 +7,7 @@ Requirement to use the pipeline:
 - Neuroalgo MATLAB functions
 - Signal Processing Toolbox
 - Symbolic Math Toolbox
+- Statistics and Machine Learning Toolbox
 
 Current features are already available
 

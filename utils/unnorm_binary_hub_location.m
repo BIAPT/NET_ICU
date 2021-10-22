@@ -16,7 +16,7 @@ function [hub_location, weights] = unnorm_binary_hub_location(b_wpli, location, 
 
     %% 1.Calculate the degree for each electrode.
     degree = degrees_und(b_wpli);
-    %norm_degree = (degrees - mean(degrees)) / std(degrees);
+    % norm_degree = (degrees - mean(degrees)) / std(degrees);
     
     %% 2. Calculate the betweeness centrality for each electrode.
     bc = betweenness_bin(b_wpli);

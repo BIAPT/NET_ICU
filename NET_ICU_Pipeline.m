@@ -6,7 +6,7 @@
 
 %% Define Parameters
 % wPLI and dPLI parameters
-frequencies = ["alpha" "theta"]; % This can be ["alpha" "theta" "delta"]
+frequencies = ["alpha"]; % This can be ["alpha" "theta" "delta"]
 %frequencies = ["alpha"]; % This can be ["alpha" "theta" "delta"]
 window_size = 10; % This is in seconds and will be how we chunk the whole dataset
 number_surrogate = 20; % Number of surrogate wPLI to create / # of permutations
@@ -16,8 +16,9 @@ step_size = window_size;
 % HUB parameters
 % threshold can be either an float between 0 and 1 for an absolute threshold or "MSG" standing for minimally
 % spanning graph. If "MSG" is used, you need to define the range of thrsholds
-threshold = "MSG"; % Minimally Spanning graph OR a value between 0 to 1
-threshold_range = 0.90:-0.01:0.01; % used ONLY if MSG More connected to less connected
+threshold = "SCT"; % Smallest connected Threshold OR a value between 0 to 1
+threshold_range = 0.9:-0.01:0.01; % used ONLY if MSG More connected to less connected
+%threshold = 0.05
 
 %% Load clean EEG data set
 % select the folder with the 
@@ -47,10 +48,6 @@ for f = 1:numel(files)
     disp('spectopo_prp load complete')
     outdir_spectrogram = fullfile(resultsfolder, ID,"Whole",'Spectrogram');
     spectrogram = spectrogram_function(recording, spectopo_prp, ID, task, outdir_spectrogram);
-
-    %% Peak frequqncy 
-    outdir_peak = fullfile(resultsfolder, ID,"Whole",'Peak');
-    peak = peak_frequency_function(recording, ID, task, outdir_spectrogram);    
     
     %% Topographic Maps of Alpha and Theta Power
     outdir_topographicmap = fullfile(resultsfolder, ID, "Whole",'Topographic Maps');
@@ -66,7 +63,7 @@ for f = 1:numel(files)
         participant_out_path_dpli = strcat(fullfile(outdir,'fc_data'),filesep,'dpli_',frequency,'_',ID,'_',task,'.mat');            
 
         if frequency == "alpha"
-            frequency_band = [8 13]; % This is in Hz
+            frequency_band = [7 13]; % This is in Hz
         elseif frequency == "theta"
             frequency_band = [4 8]; % This is in Hz
         elseif frequency == "delta"
@@ -120,7 +117,7 @@ for f = 1:numel(files)
             data = result_wpli.data.avg_wpli;
             channels = result_wpli.metadata.channels_location;
             [ro_wpli, ro_w_channels, ro_w_regions] = filter_and_reorder_channels(data,channels,pattern_file);
-
+            
             % reorder average dpli
             data = result_dpli.data.avg_dpli;
             channels = result_dpli.metadata.channels_location;
@@ -135,25 +132,46 @@ for f = 1:numel(files)
             plot_dPLI(ro_dpli, ID, frequency, task, hemisphere, fullfile(outdir,'dPLI'),ro_d_regions)
 
             if hemisphere == "Whole"
-                %% calculate and save HUB
-                disp(strcat("Participant: ", ID , "_HUB"));
+                % initiate empty hub structre to fill in hub for every
+                % timepoint
+                timesteps = size(result_wpli.data.wpli);
+                timesteps = timesteps(1);
 
-                if isfloat(threshold)
-                    finalthreshold = threshold;
-                    [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
-                elseif threshold == "MSG"
+                result_hub_weights = zeros(timesteps, recording.number_channels);
+                
+                % if we have the Smallest connected threshold we calculate it
+                % on the averaged dpli and apply it then to every time window
+                if threshold == "SCT"
                     [finalthreshold] = find_smallest_connected_threshold(ro_wpli, threshold_range);
                     [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
+                elseif isfloat(threshold)
+                    finalthreshold = threshold;
                 else
-                    disp("HUB can not be calculated! Threshold input incorrect. Please enter either a float or a string MSG ")
+                    disp("Wrong Threshold selected. Can be either SCT or a value between 0 and 1 ");
                 end
-                % here we are using only the degree and not the betweeness centrality
-                [~, hub_weights] = unnorm_binary_hub_location(b_wpli, ro_w_channels,  1.0, 0.0);
-                % do not normalize hub to z-score
-                % hub_norm_weights = (hub_weights - mean(hub_weights)) / std(hub_weights);
-
+                
+                for w=1:timesteps
+                    %% calculate HUB at every window
+                    disp(strcat("Participant: ", ID , "_HUB  at   window" , string(w) ));
+ 
+                    data = squeeze(result_wpli.data.wpli(w,:,:));
+                    channels = result_wpli.metadata.channels_location;
+                    [ro_wpli, ro_w_channels, ro_w_regions] = filter_and_reorder_channels(data,channels,pattern_file);
+                    
+                    [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
+                    
+                    % here we are using only the degree and not the betweeness centrality
+                    [~, hub_weights] = unnorm_binary_hub_location(b_wpli, ro_w_channels,  1.0, 0.0);
+                    result_hub_weights(w,:) = hub_weights;
+                   
+                    % do not normalize hub to z-score
+                    % hub_norm_weights = (hub_weights - mean(hub_weights)) / std(hub_weights);
+    
+                end
+                
+                hub_avg = mean(result_hub_weights);
                 mkdir(fullfile(outdir,'HUB'));
-                plot_hub(hub_weights, ID, frequency, task, hemisphere, fullfile(outdir,'HUB'), ro_w_channels)
+                plot_hub(hub_avg, ID, frequency, task, hemisphere, fullfile(outdir,'HUB'), ro_w_channels, finalthreshold)
             end
         end
     end
