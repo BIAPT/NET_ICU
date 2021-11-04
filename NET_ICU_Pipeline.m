@@ -16,9 +16,9 @@ step_size = window_size;
 % HUB parameters
 % threshold can be either an float between 0 and 1 for an absolute threshold or "MSG" standing for minimally
 % spanning graph. If "MSG" is used, you need to define the range of thrsholds
-threshold = "SCT"; % Smallest connected Threshold OR a value between 0 to 1
+%threshold = "SCT"; % Smallest connected Threshold OR a value between 0 to 1
 threshold_range = 0.9:-0.01:0.01; % used ONLY if MSG More connected to less connected
-%threshold = 0.05
+threshold = 0.05
 
 %% Load clean EEG data set
 % select the folder with the 
@@ -141,7 +141,7 @@ for f = 1:numel(files)
                 
                 % if we have the Smallest connected threshold we calculate it
                 % on the averaged dpli and apply it then to every time window
-                if threshold == "SCT"
+                if string(threshold) == "SCT"
                     [finalthreshold] = find_smallest_connected_threshold(ro_wpli, threshold_range);
                     [b_wpli] = binarize_matrix(threshold_matrix(ro_wpli, finalthreshold));
                 elseif isfloat(threshold)
