@@ -18,7 +18,7 @@ step_size = window_size;
 % spanning graph. If "MSG" is used, you need to define the range of thrsholds
 %threshold = "SCT"; % Smallest connected Threshold OR a value between 0 to 1
 threshold_range = 0.9:-0.01:0.01; % used ONLY if MSG More connected to less connected
-threshold = 0.05
+threshold = 0.05;
 
 %% Load clean EEG data set
 % select the folder with the 
@@ -137,7 +137,8 @@ for f = 1:numel(files)
                 timesteps = size(result_wpli.data.wpli);
                 timesteps = timesteps(1);
 
-                result_hub_weights = zeros(timesteps, recording.number_channels);
+                % create empty structure with hub weights (same nr of channesl as FC matrix) 
+                result_hub_weights = zeros(timesteps, length(ro_d_channels));
                 
                 % if we have the Smallest connected threshold we calculate it
                 % on the averaged dpli and apply it then to every time window

@@ -1,3 +1,4 @@
 
 *.jpg
 /RESULTS/**
+.DS_Store
