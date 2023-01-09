@@ -2,3 +2,5 @@
 *.jpg
 /RESULTS/**
 .DS_Store
+.DS_Store
+Utils/Python_Connectivity

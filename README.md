@@ -20,5 +20,14 @@ Current features are already available
 - ** Topographic map : Topographic map of frequency power from 4 to 13 Hz
 
 
-## Repository Structure
+# SETUP for Python version
+
+1) clone this Repo
+ `git clonse https://github.com/BIAPT/TACS_Baseline_Analysis.git`
+
+2) clone other required repos in utils folder
+  `git clone https://github.com/BIAPT/Python_Connectivity.git utils/Python_Connectivity`
+
+
+
 .... 
