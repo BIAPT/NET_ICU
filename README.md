@@ -1,5 +1,7 @@
 # NET_ICU Pipeline
-This repository is for the EEG-based graph theory analysis of the NET_ICU study. The code found here is a work-in progress and not a final implementation. 
+**Python below**
+
+This repository is for the EEG-based graph theory analysis of the NET_ICU study. The code found here is a work-in progress and not a final implementation.
 
 Requirement to use the pipeline:
 
@@ -28,6 +30,11 @@ Current features are already available
 2) clone other required repos in utils folder
   `git clone https://github.com/BIAPT/Python_Connectivity.git utils/Python_Connectivity`
 
+3) install requirements.txt `pip install -r requirements.txt`
+    **This step is extremely important, as this code only works fine with MNE=1.1.1**
 
+4) Analysis runs independently with the `NET_ICU_Python_Notebook.npy`
 
-.... 
+- Saves results and figures automatically
+
+....
